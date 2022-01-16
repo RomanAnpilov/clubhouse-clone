@@ -1,9 +1,7 @@
 .block {
     margin: 100px auto;
     text-align: center;
-    display: flex;
-    justify-content: space-between;
-    flex-direction: column;
+    max-width: 500px;
 
     p {
         font-size: 20px;

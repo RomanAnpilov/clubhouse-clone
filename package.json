@@ -16,6 +16,7 @@
     "react-number-format": "^4.9.1"
   },
   "devDependencies": {
+    "@types/react": "^17.0.38",
     "eslint": "8.6.0",
     "eslint-config-next": "12.0.7"
   }

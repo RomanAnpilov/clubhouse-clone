@@ -3,17 +3,18 @@ import clsx from "clsx";
 import { Button } from "../../Button";
 import { WhiteBlock } from "../../WhiteBlock";
 import { StepInfo } from "../../StepInfo";
+import Image from "next/image"
 
 import styles from "./EnterNameStep.module.scss";
 
 export const EnterNameStep = () => {
   return (
     <div className={styles.block}>
-      {/* <StepInfo
+      <StepInfo
         icon="/static/man.png"
         title="What is your full name?"
         description="People use real names on Clubhouse"
-      /> */}
+      />
       <WhiteBlock className={clsx("m-auto", styles.whiteBlock)}>
         <div className="mb-30">
           <input className="field" placeholder="Enter fullname" />

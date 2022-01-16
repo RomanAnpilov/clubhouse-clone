@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import React from "react";
 import clsx from "clsx";
 import NumberFormat from "react-number-format";
@@ -16,11 +17,11 @@ export const EnterPhoneStep = () => {
 
   return (
     <div className={styles.block}>
-      {/* <StepInfo
+      <StepInfo
         icon="/static/phone.png"
         title="Enter your phone #"
         description="We will send you a confirmation code"
-      /> */}
+      />
       <WhiteBlock className={clsx("m-auto mt-30", styles.whiteBlock)}>
         <div className={clsx("mb-30", styles.input)}>
           <img src="/static/russian-flag.png" alt="flag" width={24} />
