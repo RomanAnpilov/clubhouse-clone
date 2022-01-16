@@ -1,7 +1,6 @@
 .block {
     margin: 100px auto;
     text-align: center;
-    max-width: 500px;
 
     p {
         font-size: 20px;
@@ -10,9 +9,18 @@
     }
 }
 
-// .avatar {
-//     background-color: lightgray;
-//     width: 40px;
-//     height: 40px;
-//     border-radius: 5px;
-// }
+.whiteBlock {
+    width: 460px;
+
+
+}
+
+.avatar {
+    b {
+        background-color: lightgray;
+        padding: 20px;
+        border-radius: 15px;
+    }
+
+    margin-bottom: 40px;
+}

@@ -6,10 +6,14 @@ import { Button } from "../../Button";
 import { WhiteBlock } from "../../WhiteBlock";
 import { StepInfo } from "../../StepInfo";
 import { Avatar } from "../../Avatar";
+import { MainContext } from "../../../pages";
 
 import styles from "./ChooseAvatarStep.module.scss";
 
+
 export const ChooseAvatarStep: React.FC = () => {
+  const {onNextStep} = React.useContext(MainContext)
+  
   const [avatarUrl, setAvatarUrl] = React.useState<string>('');
   const inputFileRef = React.useRef<HTMLInputElement>(null);
 
@@ -46,7 +50,7 @@ export const ChooseAvatarStep: React.FC = () => {
           </label>
         </div>
         <input id="image" ref={inputFileRef} type="file" hidden />
-        <Button>
+        <Button onClick={onNextStep}>
           Next
           <img
             height={12}
