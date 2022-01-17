@@ -4,6 +4,7 @@ import Link from "next/link";
 
 import { Avatar } from "../../components/Avatar";
 import { Button } from "../../components/Button";
+import {BackButton} from "../BackButton";
 
 import styles from "./Profile.module.scss";
 
@@ -22,18 +23,7 @@ export const Profile: React.FC<ProfileProps> = ({
 }) => {
   return (
     <>
-      <Link href="/rooms">
-        <div className="d-flex cup">
-          <img
-            height={25}
-            width={25}
-            src="/static/back-arrow.png"
-            alt="Back arrow"
-            className="mr-10"
-          />
-          <h3 className="mt-0">Back</h3>
-        </div>
-      </Link>
+      <BackButton title="Back" href="/rooms" />
 
       <div className="d-flex align-items-center">
         <div className="d-flex align-items-center">
@@ -49,6 +39,6 @@ export const Profile: React.FC<ProfileProps> = ({
       </div>
 
       <p>{about}</p>
-    </>
+      </>
   );
 };

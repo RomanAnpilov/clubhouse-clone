@@ -33,15 +33,15 @@ export const ConversationCard: React.FC<ConversationCardProps> = ({
               height="55px"
               src={url}
               key={i}
-              className={i === avatars.length - 1 ? "lastAvatar" : ""}
+              className={avatars.length > 1 && i === avatars.length - 1 ? styles.lastAvatar : ""}
             />
           ))}
         </div>
         <div className={clsx(styles.info, "ml-10")}>
           <ul className={styles.users}>
-            {guests.map((name) => (
-              <li key={name}>
-                {name}{" "}
+            {guests.map((name, i) => (
+              <li key={i}>
+                {name}
                 <img
                   src="/static/cloud.png"
                   alt="Cloud"
