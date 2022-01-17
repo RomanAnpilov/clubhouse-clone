@@ -1,0 +1,41 @@
+.card {
+  padding: 30px 35px !important;
+  width: 380px !important;
+  min-height: 170px !important;
+  box-sizing: border-box !important;
+  cursor: pointer;
+  transition: all 0.15s ease-in-out;
+  li {
+    list-style-type: none;
+    margin-left: 10px;
+    align-items: center;
+  }
+
+  ul {
+      display: flex;
+  }
+}
+
+.title {
+    margin: 0;
+    font-weight: bold;
+    font-size: 22px;
+    line-height: 30px;
+    width: 320px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.users {
+    display: flex;
+    flex-direction: column
+}
+
+.avatars {
+  :last-child {
+      position: relative;
+    top: -30px;
+    left: 30px;
+  }
+}
