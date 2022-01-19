@@ -12,6 +12,10 @@ passport.use(
 
     (accessToken, refreshToken, profile, cb) => {
       console.log(accessToken, refreshToken, profile, cb);
+      const user = {
+        fullname: profile.displayName,
+        avatarUrl: profile.photos?.[0].value,
+      }
     }
   )
 );
