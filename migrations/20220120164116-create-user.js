@@ -14,6 +14,15 @@ module.exports = {
       avatarUrl: {
         type: Sequelize.STRING
       },
+      isActive: {
+        type: Sequelize.INTEGER
+      },
+      username: {
+        type: Sequelize.STRING
+      },
+      phone: {
+        type: Sequelize.STRING
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

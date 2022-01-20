@@ -12,8 +12,8 @@ import { EnterCodeStep } from '../components/steps/EnterCodeStep';
 
 const StepsComponent = {
   0: WelcomeStep,
-  1: EnterNameStep,
-  2: TwitterStep,
+  1: TwitterStep,
+  2: EnterNameStep,
   3: ChooseAvatarStep,
   4: EnterPhoneStep,
   5: EnterCodeStep

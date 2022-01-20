@@ -2,24 +2,31 @@ import express from "express";
 import dotenv from "dotenv";
 
 dotenv.config({
-    path: "server/.env"
+  path: "server/.env",
 });
 
-import "./core/db"
+import "./core/db";
 
-import {passport} from "./core/passport";
+import { passport } from "./core/passport";
 
 const app = express();
 
-app.get('/auth/github',
-  passport.authenticate('github'));
+app.use(passport.initialize());
 
-app.get('/auth/github/callback', 
-  passport.authenticate('github', { failureRedirect: '/login' }),
+app.get("/auth/github", passport.authenticate("github"));
+
+app.get(
+  "/auth/github/callback",
+  passport.authenticate("github", { failureRedirect: "/login" }),
   (req, res) => {
     // Successful authentication, redirect home.
-    res.send();
-  });
+    res.send(
+      `<script>window.opener.postMessage('${JSON.stringify(
+        req.user
+      )}','*');window.close();</script>`
+    );
+  }
+);
 
 app.listen(3002, () => {
   console.log("SERVER RUNNED");

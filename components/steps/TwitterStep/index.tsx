@@ -4,14 +4,30 @@ import React from "react";
 
 import { Button } from "../../Button";
 import { WhiteBlock } from "../../WhiteBlock";
-import {StepInfo} from "../../StepInfo"
+import { StepInfo } from "../../StepInfo";
 import { MainContext } from "../../../pages";
 
 import styles from "./TwitterStep.module.scss";
 
+export const TwitterStep: React.FC = () => {
+  const { onNextStep } = React.useContext(MainContext);
 
-export const TwitterStep: React.FC= () => {
-  const {onNextStep} = React.useContext(MainContext)
+  const onClickAuth = () => {
+    const win = window.open("http://localhost:3002/auth/github/", "Auth", "menubar=no,location=no,resizable=no,scrollbars=no,status=no, width=400, height=500");
+
+    const timer = setInterval(() => {
+      if (win.closed) {
+        clearInterval(timer);
+        onNextStep();
+      }
+    }, 100);
+  };
+
+  React.useEffect(() => {
+    window.addEventListener('message', data => {
+      console.log(data)
+    })
+  })
 
   return (
     <div className={styles.block}>
@@ -25,7 +41,7 @@ export const TwitterStep: React.FC= () => {
         </div>
         <h2 className="mb-40">Roman Anpilov</h2>
         <div>
-          <Button onClick={onNextStep}>
+          <Button onClick={onClickAuth}>
             <img
               height={14}
               className="d-ib ml-10"
