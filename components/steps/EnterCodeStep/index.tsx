@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import clsx from "clsx";
 import React from "react";
-import axios from "../../../core/axios";
+import {Axios} from "../../../core/axios";
 
 import { useRouter } from "next/router";
 
@@ -11,7 +11,7 @@ import { StepInfo } from "../../StepInfo";
 
 import styles from "./EnterCodeStep.module.scss";
 
-export const EnterCodeStep = () => {
+export const EnterCodeStep: React.FC  = () => {
   const router = useRouter()
 
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
@@ -34,7 +34,7 @@ export const EnterCodeStep = () => {
 
   const onSubmit = async () => {
     try {
-      await axios.get("/todos");
+      await Axios.get("/todos");
       setIsLoading(true);
       router.push('/rooms')
     } catch (err) {

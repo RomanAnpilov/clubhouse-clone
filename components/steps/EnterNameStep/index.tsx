@@ -10,10 +10,10 @@ import { MainContext } from "../../../pages";
 import styles from "./EnterNameStep.module.scss";
 
 
-export const EnterNameStep = () => {
-  const [inputValue, setInputValue] = React.useState<string>()
+export const EnterNameStep: React.FC = () => {
+  const {onNextStep, userData, setFieldValue} = React.useContext(MainContext)
 
-  const {onNextStep} = React.useContext(MainContext)
+  const [inputValue, setInputValue] = React.useState<string>(userData.fullname)
 
   const nextDisabled = !inputValue;
 
@@ -23,6 +23,7 @@ export const EnterNameStep = () => {
 
   const onClickNextStep = () => {
     //TODO: заебенить сюда сохранение значений для бэка
+    setFieldValue("fullname", inputValue)
     onNextStep();
   }
 

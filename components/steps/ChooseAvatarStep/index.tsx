@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import React from "react";
 import clsx from "clsx";
+import { Axios } from "../../../core/axios";
 
 import { Button } from "../../Button";
 import { WhiteBlock } from "../../WhiteBlock";
@@ -10,17 +11,38 @@ import { MainContext } from "../../../pages";
 
 import styles from "./ChooseAvatarStep.module.scss";
 
+const uploadFile = async (file: File): Promise<{url: string}> => {
+  const formData = new FormData();
+
+  formData.append("photo", file);
+
+  const { data } = await Axios({
+    method: "POST",
+    url: "/upload",
+    data: formData,
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+
+  return data;
+};
 
 export const ChooseAvatarStep: React.FC = () => {
-  const {onNextStep} = React.useContext(MainContext)
-  
-  const [avatarUrl, setAvatarUrl] = React.useState<string>('');
+  const { onNextStep, setFieldValue, userData } = React.useContext(MainContext);
+
+  const [avatarUrl, setAvatarUrl] = React.useState<string>("");
   const inputFileRef = React.useRef<HTMLInputElement>(null);
 
-  const handleChangeImage = (event: Event):void => {
+  const handleChangeImage = async (event: Event) => {
     const file = (event.target as HTMLInputElement).files[0];
-    const imageUrl = URL.createObjectURL(file);
-    setAvatarUrl(imageUrl);
+    if (file) {
+      const imageUrl = URL.createObjectURL(file);
+      setAvatarUrl(imageUrl);
+      const data = await uploadFile(file);
+      setAvatarUrl(data.url);
+      setFieldValue('avatarUrl',data.url)
+    }
   };
 
   React.useEffect(() => {
@@ -33,16 +55,12 @@ export const ChooseAvatarStep: React.FC = () => {
     <div className={styles.block}>
       <StepInfo
         icon="/static/celebration.png"
-        title="Okay, Roman Anpilov!"
+        title={`Okay, ${userData.fullname}!`}
         description="How is this photo?"
       />
       <WhiteBlock className={clsx("m-auto mt-40", styles.whiteBlock)}>
         <div className={styles.avatar}>
-        <Avatar
-          width="120px"
-          height="120px"
-          src={avatarUrl}
-        />
+          <Avatar width="120px" height="120px" src={avatarUrl} />
         </div>
         <div className="mb-30">
           <label htmlFor="image" className="link cup">

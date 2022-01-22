@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import React from "react";
-import axios from "../../core/axios"
+import {Axios} from "../../core/axios"
 
 import { Header } from "../../components/Header";
 import { BackButton } from "../../components/BackButton";
@@ -20,7 +20,7 @@ export default function RoomPage({room}) {
 
 export const getServerSideProps = async (ctx) => {
   try {
-    const {data} = await axios.get('/rooms.json');
+    const {data} = await Axios.get('/rooms.json');
     const room = data.find((obj) => obj.id === ctx.query.id)
     console.log(room)
     return {

@@ -7,33 +7,36 @@ import { WhiteBlock } from "../../WhiteBlock";
 import { StepInfo } from "../../StepInfo";
 import { MainContext } from "../../../pages";
 
-import styles from "./TwitterStep.module.scss";
+import styles from "./GithubStep.module.scss";
 
-export const TwitterStep: React.FC = () => {
-  const { onNextStep } = React.useContext(MainContext);
+export const GithubStep: React.FC = () => {
+  const { onNextStep, setUserData } = React.useContext(MainContext);
 
   const onClickAuth = () => {
-    const win = window.open("http://localhost:3002/auth/github/", "Auth", "menubar=no,location=no,resizable=no,scrollbars=no,status=no, width=400, height=500");
-
-    const timer = setInterval(() => {
-      if (win.closed) {
-        clearInterval(timer);
-        onNextStep();
-      }
-    }, 100);
+    const win = window.open(
+      "http://localhost:3002/auth/github/",
+      "Auth",
+      "menubar=no,location=no,resizable=no,scrollbars=no,status=no, width=400, height=500"
+    );
   };
 
   React.useEffect(() => {
-    window.addEventListener('message', data => {
-      console.log(data)
-    })
-  })
+    window.addEventListener("message", ({data}) => {
+      const user: string = data;
+
+      if (typeof user === "string" && user.includes("avatarUrl")) {
+        const json = JSON.parse(user);
+        setUserData(json)
+      }
+      onNextStep();
+    });
+  });
 
   return (
     <div className={styles.block}>
       <StepInfo
         icon="/static/plug.png"
-        title="Do you want import info from Twitter?"
+        title="Do you want import info from GitHub?"
       />
       <WhiteBlock className={clsx("m-auto mt-40", styles.whiteBlock)}>
         <div className={styles.avatar}>
@@ -41,14 +44,8 @@ export const TwitterStep: React.FC = () => {
         </div>
         <h2 className="mb-40">Roman Anpilov</h2>
         <div>
-          <Button onClick={onClickAuth}>
-            <img
-              height={14}
-              className="d-ib ml-10"
-              src="/static/twitter-logo.png"
-              alt="twitter"
-            />
-            Import from Twitter
+          <Button className={styles.button} onClick={onClickAuth}>
+            Import from GitHub
             <img
               height={12}
               className="d-ib ml-10"

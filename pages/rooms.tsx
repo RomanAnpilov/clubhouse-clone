@@ -1,5 +1,5 @@
 import React from "react";
-import axios from "../core/axios";
+import {Axios} from "../core/axios";
 
 import { Button } from "../components/Button";
 import { Header } from "../components/Header";
@@ -38,7 +38,7 @@ export default function Rooms({rooms = []}) {
 
 export const getServerSideProps = async () => {
   try {
-    const {data} = await axios.get('/rooms.json');
+    const {data} = await Axios.get('/rooms.json');
     return {
       props: {
         rooms: data

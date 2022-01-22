@@ -16,7 +16,7 @@ type InputValueState = {
   value: string;
 }
 
-export const EnterPhoneStep = () => {
+export const EnterPhoneStep: React.FC  = () => {
   const {onNextStep} = React.useContext(MainContext)
 
   const [values, setValues] = React.useState<InputValueState>({} as InputValueState);
