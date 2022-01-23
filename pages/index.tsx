@@ -20,19 +20,20 @@ const StepsComponent = {
 
 type MainContextProps = {
   onNextStep: () => void;
-  setUserData: React.Dispatch<React.SetStateAction<User>>;
-  setFieldValue: (field: keyof User, value: string) => void;
+  setUserData: React.Dispatch<React.SetStateAction<UserData>>;
+  setFieldValue: (field: keyof UserData, value: string) => void;
   step: number;
-  userData: User;
+  userData: UserData;
 };
 
-type User = {
+export type UserData = {
   id: string;
   fullname: string;
   avatarUrl: string;
   isActive: number;
   username: string;
   phone: string;
+  token?: string;
 };
 
 export const MainContext = React.createContext<MainContextProps>(
@@ -40,8 +41,8 @@ export const MainContext = React.createContext<MainContextProps>(
 );
 
 export default function Home() {
-  const [step, setStep] = React.useState<number>(3);
-  const [userData, setUserData] = React.useState<User>();
+  const [step, setStep] = React.useState<number>(0);
+  const [userData, setUserData] = React.useState<UserData>();
 
   const Step = StepsComponent[step];
 
@@ -49,7 +50,7 @@ export default function Home() {
     setStep((prev) => prev + 1);
   };
 
-  const setFieldValue = (field: keyof User, value: string) => {
+  const setFieldValue = (field: keyof UserData, value: string) => {
     setUserData(prev => ({
       ...prev,
       [field] : value
@@ -57,6 +58,7 @@ export default function Home() {
   }
 
   console.log(userData)
+  console.log(userData ? userData.token : "aa")
 
   return (
     <MainContext.Provider value={{ step, onNextStep, userData, setUserData, setFieldValue }}>

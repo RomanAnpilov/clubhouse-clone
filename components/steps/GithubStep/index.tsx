@@ -1,11 +1,12 @@
 /* eslint-disable @next/next/no-img-element */
 import clsx from "clsx";
 import React from "react";
+import Cookies from "js-cookie"
 
 import { Button } from "../../Button";
 import { WhiteBlock } from "../../WhiteBlock";
 import { StepInfo } from "../../StepInfo";
-import { MainContext } from "../../../pages";
+import { MainContext, UserData } from "../../../pages";
 
 import styles from "./GithubStep.module.scss";
 
@@ -25,10 +26,13 @@ export const GithubStep: React.FC = () => {
       const user: string = data;
 
       if (typeof user === "string" && user.includes("avatarUrl")) {
-        const json = JSON.parse(user);
-        setUserData(json)
+        const json: UserData = JSON.parse(user);
+        setUserData(json);
+        onNextStep();
+
+        Cookies.set("token", json.token)
       }
-      onNextStep();
+      
     });
   });
 
