@@ -9,6 +9,7 @@ import { StepInfo } from "../../StepInfo";
 import { MainContext } from "../../../pages";
 
 import styles from "./EnterPhoneStep.module.scss";
+import { Axios } from "../../../core/axios";
 
 
 type InputValueState = {
@@ -17,12 +18,26 @@ type InputValueState = {
 }
 
 export const EnterPhoneStep: React.FC  = () => {
-  const {onNextStep} = React.useContext(MainContext)
-
+  const {onNextStep, setFieldValue} = React.useContext(MainContext)
+  const [isLoading, setIsLoading] = React.useState(false);
   const [values, setValues] = React.useState<InputValueState>({} as InputValueState);
 
   const nextDisabled =
     !values.formattedValue || values.formattedValue.includes("_");
+
+  const onSubmit = async () => {
+    try {
+      setIsLoading(true);
+      await Axios.get('/auth/sms');
+      setFieldValue("phone", values.value)
+      onNextStep();
+    }
+    catch (err) {
+      console.warn("Error with SMS " + err)
+    } finally {
+      setIsLoading(false);
+    }
+  }
 
   return (
     <div className={styles.block}>
@@ -43,7 +58,7 @@ export const EnterPhoneStep: React.FC  = () => {
             onValueChange={({formattedValue, value}) => setValues({formattedValue, value})}
           />
         </div>
-        <Button disabled={nextDisabled} onClick={onNextStep}>
+        <Button disabled={isLoading || nextDisabled} onClick={onNextStep}>
           Next
           <img
             height={12}

@@ -57,8 +57,9 @@ export default function Home() {
     }))
   }
 
-  console.log(userData)
-  console.log(userData ? userData.token : "aa")
+  React.useEffect(() => {
+    window.localStorage.setItem('userData', JSON.stringify(userData))
+  }, [userData])
 
   return (
     <MainContext.Provider value={{ step, onNextStep, userData, setUserData, setFieldValue }}>

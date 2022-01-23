@@ -5,6 +5,7 @@ const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, proces
     dialect: 'postgres'
 });
 
+
 (async () => {
     try {
         await sequelize.authenticate();

@@ -3,3 +3,26 @@
     background-size: cover;
     background-repeat: no-repeat;
 }
+
+.avatarBorder {
+    border: 5px solid #fff;
+    box-shadow: 0 0 0 4px #e5e0d0;
+}
+
+.mask {
+    position: absolute;
+}
+
+.border {
+    position: relative;
+    z-index: 1;
+}
+
+.emptyAvatar {
+    justify-content: center;
+    align-items: center;
+    display: inline-flex;
+    font-size: 40px;
+    font-weight: bold;
+    background-color: #e0e0e0;
+}

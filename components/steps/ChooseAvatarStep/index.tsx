@@ -30,8 +30,8 @@ const uploadFile = async (file: File): Promise<{url: string}> => {
 
 export const ChooseAvatarStep: React.FC = () => {
   const { onNextStep, setFieldValue, userData } = React.useContext(MainContext);
-
-  const [avatarUrl, setAvatarUrl] = React.useState<string>("");
+  const avatarLetters = userData.fullname.split(" ").map(s => s[0]).join("")
+  const [avatarUrl, setAvatarUrl] = React.useState<string>(userData.avatarUrl);
   const inputFileRef = React.useRef<HTMLInputElement>(null);
 
   const handleChangeImage = async (event: Event) => {
@@ -60,7 +60,7 @@ export const ChooseAvatarStep: React.FC = () => {
       />
       <WhiteBlock className={clsx("m-auto mt-40", styles.whiteBlock)}>
         <div className={styles.avatar}>
-          <Avatar width="120px" height="120px" src={avatarUrl} />
+          <Avatar letters={avatarLetters} width="120px" height="120px" src={avatarUrl} />
         </div>
         <div className="mb-30">
           <label htmlFor="image" className="link cup">
