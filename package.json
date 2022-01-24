@@ -26,6 +26,7 @@
     "next": "12.0.7",
     "node-sass": "^6.0.1",
     "nodemon": "^2.0.15",
+    "nookies": "^2.5.2",
     "passport": "^0.5.2",
     "passport-github": "^1.1.0",
     "passport-jwt": "^4.0.0",

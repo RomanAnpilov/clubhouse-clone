@@ -34,8 +34,8 @@ export const EnterCodeStep: React.FC  = () => {
 
   const onSubmit = async () => {
     try {
-      await Axios.get("/todos");
       setIsLoading(true);
+      await Axios.get("/todos");
       router.push('/rooms')
     } catch (err) {
       alert("ERROR!")

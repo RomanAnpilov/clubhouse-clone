@@ -28,7 +28,7 @@ export const EnterPhoneStep: React.FC  = () => {
   const onSubmit = async () => {
     try {
       setIsLoading(true);
-      await Axios.get('/auth/sms');
+      await Axios.get(`/auth/sms?=${values.value}`);
       setFieldValue("phone", values.value)
       onNextStep();
     }
@@ -58,7 +58,7 @@ export const EnterPhoneStep: React.FC  = () => {
             onValueChange={({formattedValue, value}) => setValues({formattedValue, value})}
           />
         </div>
-        <Button disabled={isLoading || nextDisabled} onClick={onNextStep}>
+        <Button disabled={isLoading || nextDisabled} onClick={onSubmit}>
           Next
           <img
             height={12}

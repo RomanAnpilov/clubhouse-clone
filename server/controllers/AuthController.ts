@@ -45,13 +45,12 @@ class AuthController {
 
   async sendSMS(req: express.Request, res: express.Response) {
     const phone = req.query.phone;
-    const userId = req.user.id;
+    const userId = String(req.user.id);
     const smsCode = String(generateRandomCode());
-
-    console.log(typeof smsCode)
-    if (!phone) {
-      res.status(400).send();
-    }
+    console.log(phone)
+    // if (!phone) {
+    //   res.json({message: "Номер телефона не указан"})
+    // }
 
     try {
       // const data = await axios.get(
@@ -75,6 +74,7 @@ class AuthController {
 
       res.status(200).json({ message: "ALL GOOD" });
     } catch (err) {
+      console.log(err)
       res.status(500).json({ message: "Error when sending SMS" + err });
     }
   }
