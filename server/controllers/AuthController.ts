@@ -1,5 +1,5 @@
 import express from "express";
-import { Codes } from "../../models";
+import { Codes, User } from "../../models";
 import { generateRandomCode } from "../utils/generateRandomCode";
 
 class AuthController {
@@ -16,8 +16,8 @@ class AuthController {
   }
 
   async activate(req: express.Request, res: express.Response) {
-    const userId = req.user.id.toString();
-    const smsCode = req.query.code.toString();
+    const userId = String(req.user.id);
+    const smsCode = String(req.query.code);
 
     if (!smsCode) {
       return res.status(400).send();
@@ -34,12 +34,14 @@ class AuthController {
         await Codes.destroy({
           where: whereQuery,
         });
+        await User.update({isActive: 1}, {where: {id: userId}})
         return res.send("Succes activated");
       } else {
         throw new Error("User not found");
       }
     } catch (err) {
       res.status(500).json({ message: "Error with accout activation" + err });
+      console.log(err)
     }
   }
 

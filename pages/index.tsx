@@ -1,6 +1,7 @@
 import Head from "next/head";
 import Image from "next/image";
 import React from "react";
+import { checkAuth } from "../utils/checkAuth";
 
 import { WelcomeStep } from "../components/steps/WelcomeStep";
 import { EnterNameStep } from "../components/steps/EnterNameStep";
@@ -101,4 +102,26 @@ export default function Home() {
       <Step />
     </MainContext.Provider>
   );
+}
+
+export const getServerSideProps = async (ctx) => {
+  try {
+    const user = await checkAuth(ctx);
+
+    console.log(user, '!!!!!')
+
+    if (user) {
+      return {
+        props : {},
+        redirect: {
+          destination : '/rooms',
+          permanent : false,
+        }
+      }
+    }
+
+    return {props : {}}
+  } catch (error) {
+    
+  }
 }

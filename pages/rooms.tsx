@@ -1,11 +1,14 @@
 import React from "react";
-import {Axios} from "../core/axios";
+import axios from "axios";
+import Cookies from "nookies"
 
 import { Button } from "../components/Button";
 import { Header } from "../components/Header";
 import { ConversationCard } from "../components/ConversationCard";
+import { UserApi } from "../api/UserApi";
 
 import Link from "next/link";
+
 
 export default function Rooms({rooms = []}) {
     return (
@@ -36,9 +39,12 @@ export default function Rooms({rooms = []}) {
   );
 }
 
-export const getServerSideProps = async () => {
+export const getServerSideProps = async (ctx) => {
   try {
-    const {data} = await Axios.get('/rooms.json');
+    const {data} = await axios.get('http://localhost:3000/rooms.json');
+    // const user = await UserApi.getMe();
+    // console.log(user, "USER !!!!!!")
+
     return {
       props: {
         rooms: data
@@ -46,7 +52,7 @@ export const getServerSideProps = async () => {
     }
     console.log(data)
   } catch (err) {
-    console.log("ERROR BITCH!")
+    console.log("ERROR BITCH!" + err)
   }
   
 }

@@ -10,17 +10,19 @@ import { MainContext } from "../../../pages";
 
 import styles from "./EnterPhoneStep.module.scss";
 import { Axios } from "../../../core/axios";
-
+import Cookies from "js-cookie";
 
 type InputValueState = {
   formattedValue: string;
   value: string;
-}
+};
 
-export const EnterPhoneStep: React.FC  = () => {
-  const {onNextStep, setFieldValue} = React.useContext(MainContext)
+export const EnterPhoneStep: React.FC = () => {
+  const { onNextStep, setFieldValue } = React.useContext(MainContext);
   const [isLoading, setIsLoading] = React.useState(false);
-  const [values, setValues] = React.useState<InputValueState>({} as InputValueState);
+  const [values, setValues] = React.useState<InputValueState>(
+    {} as InputValueState
+  );
 
   const nextDisabled =
     !values.formattedValue || values.formattedValue.includes("_");
@@ -28,16 +30,22 @@ export const EnterPhoneStep: React.FC  = () => {
   const onSubmit = async () => {
     try {
       setIsLoading(true);
-      await Axios.get(`/auth/sms?=${values.value}`);
-      setFieldValue("phone", values.value)
+      console.log(Cookies.get("token"));
+      await Axios({
+        method: "get",
+        url: `/auth/sms?=${values.value}`,
+        headers: {
+          Authorization: "Bearer " + Cookies.get("token"),
+        }
+      });
+      setFieldValue("phone", values.value);
       onNextStep();
-    }
-    catch (err) {
-      console.warn("Error with SMS " + err)
+    } catch (err) {
+      console.warn("Error with SMS " + err);
     } finally {
       setIsLoading(false);
     }
-  }
+  };
 
   return (
     <div className={styles.block}>
@@ -48,14 +56,15 @@ export const EnterPhoneStep: React.FC  = () => {
       />
       <WhiteBlock className={clsx("m-auto mt-30", styles.whiteBlock)}>
         <div className={clsx("mb-30", styles.input)}>
-          
           <NumberFormat
             className="field"
             format="+# (###) ###-##-##"
             mask="_"
             placeholder="+7 (999) 123-45-67"
             value={values.value}
-            onValueChange={({formattedValue, value}) => setValues({formattedValue, value})}
+            onValueChange={({ formattedValue, value }) =>
+              setValues({ formattedValue, value })
+            }
           />
         </div>
         <Button disabled={isLoading || nextDisabled} onClick={onSubmit}>
