@@ -1,21 +1,21 @@
 import { GetServerSidePropsContext } from "next";
-import Cookies from "nookies";
+import nookies from "nookies";
 import { Axios } from "../core/axios";
 import { UserApi } from "../api/UserApi";
+import { UserData } from "../pages";
 
 export const checkAuth = async (
   ctx: GetServerSidePropsContext
-): Promise<boolean> => {
+) => {
   try {
-    const cookies = await Cookies.get(ctx);
-    console.log(cookies.token, "I FUCK ADOLF");
+    const cookies = nookies.get(ctx);
     if (cookies.token) {
-      Axios.defaults.headers.common["Authorization"] = `Bearer ${cookies.token}`;
+      Axios.defaults.headers["Authorization"] = `Bearer ${cookies.token}`;
+      Axios.defaults["Authorization"] = `Bearer ${cookies.token}`;
     }
-    const user = await UserApi.getMe();
-    return true;
+    const user = await UserApi;
+    return user;
   } catch (error) {
-    console.log(error);
     return false;
   }
 };

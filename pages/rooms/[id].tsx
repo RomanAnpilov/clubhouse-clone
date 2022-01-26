@@ -22,7 +22,7 @@ export const getServerSideProps = async (ctx) => {
   try {
     const {data} = await Axios.get('/rooms.json');
     const room = data.find((obj) => obj.id === ctx.query.id)
-    console.log(room)
+    // console.log(room)
     return {
       props: {
         room: room

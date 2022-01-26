@@ -4,10 +4,10 @@ import { Axios } from '../core/axios';
 
 class AppDocument extends Document {
   static async getInitialProps(ctx) {
-    // const cookies = Cookies.get(ctx);
-    // if (cookies.token) {
-    //   Axios.defaults.headers.common.Authorization = `Bearer ${cookies.token}`;
-    // }
+    const cookies = Cookies.get(ctx);
+    if (cookies.token) {
+      Axios.defaults.headers.common.Authorization = `Bearer ${cookies.token}`;
+    }
     const initialProps = await Document.getInitialProps(ctx)
     return { ...initialProps }
   }

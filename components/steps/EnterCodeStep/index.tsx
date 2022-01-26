@@ -8,6 +8,7 @@ import { useRouter } from "next/router";
 import { Button } from "../../Button";
 import { WhiteBlock } from "../../WhiteBlock";
 import { StepInfo } from "../../StepInfo";
+import Cookies from "js-cookie";
 
 import styles from "./EnterCodeStep.module.scss";
 
@@ -35,7 +36,13 @@ export const EnterCodeStep: React.FC = () => {
   const onSubmit = async () => {
     try {
       setIsLoading(true);
-      await Axios.get(`/auth/sms/activate?code=${codes.join('')}`);
+      await Axios({
+        method: "get",
+        url: `/auth/sms/activate?code=${codes.join('')}`,
+        headers: {
+          Authorization: "Bearer " + Cookies.get("token"),
+        }
+      });
       router.push("/rooms");
     } catch (err) {
       alert("ERROR!");

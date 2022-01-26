@@ -50,7 +50,7 @@ export const getServerSideProps = async (ctx) => {
         rooms: data
       }
     }
-    console.log(data)
+    // console.log(data)
   } catch (err) {
     console.log("ERROR BITCH!" + err)
   }

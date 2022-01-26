@@ -107,9 +107,7 @@ export default function Home() {
 export const getServerSideProps = async (ctx) => {
   try {
     const user = await checkAuth(ctx);
-
-    console.log(user, '!!!!!')
-
+    console.log("user",user)
     if (user) {
       return {
         props : {},
