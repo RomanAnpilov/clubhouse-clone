@@ -3,6 +3,7 @@ import axios from "axios";
 import Cookies from "nookies"
 
 import { Button } from "../components/Button";
+import {StartRoomModal} from "../components/StartRoomModal";
 import { Header } from "../components/Header";
 import { ConversationCard } from "../components/ConversationCard";
 import { UserApi } from "../api/UserApi";
@@ -11,14 +12,16 @@ import Link from "next/link";
 
 
 export default function Rooms({rooms = []}) {
+  const [visibleModal, setVisibleModal] = React.useState(false);
     return (
     <>
       <Header></Header>
       <div className="container">
         <div className="mt-40 d-flex align-items-center justify-content-between">
           <h1>All conversations</h1>
-          <Button color="green">+ Start room</Button>
+          <Button color="green" onClick={() => setVisibleModal(true)}>+ Start room</Button>
         </div>
+        {visibleModal ? <StartRoomModal onClose={() => setVisibleModal(false)} /> : ""}
         <div className="grid mt-20">
           {rooms.map((room) => (
             <Link key={room.id} href={`/rooms/${room.id}`}>
