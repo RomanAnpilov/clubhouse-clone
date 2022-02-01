@@ -13,7 +13,7 @@ export const checkAuth = async (
       Axios.defaults.headers["Authorization"] = `Bearer ${cookies.token}`;
       Axios.defaults["Authorization"] = `Bearer ${cookies.token}`;
     }
-    const user = await UserApi;
+    const user = await UserApi(ctx).getMe();
     return user;
   } catch (error) {
     return false;

@@ -7,16 +7,15 @@ export const UserApi = (ctx: GetServerSidePropsContext) => {
   const cookies = Cookies.get(ctx);
   const token = cookies.token;
   return {
-    User: {
-      getMe: async () => {
-        const { data } = await Axios({
-          method: "get",
-          url: `auth/me`,
-          headers: {
-            Authorization: "Bearer " + token,
-          },
-        });
-      },
+    getMe: async (): Promise<UserData> => {
+      const { data } = await Axios({
+        method: "get",
+        url: `/auth/me`,
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      });
+      return data;
     },
   };
 };

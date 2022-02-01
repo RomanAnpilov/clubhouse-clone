@@ -25,8 +25,7 @@ app.get("/auth/github", passport.authenticate("github"));
 // Получение данных о профиле
 app.get(
   "/auth/me",
-  passport.authenticate("jwt", { session: false }, AuthController.getMe)
-);
+  passport.authenticate("jwt", { session: false }), AuthController.getMe);
 
 // Активация через смс код
 app.get(
