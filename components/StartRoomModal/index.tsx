@@ -5,7 +5,11 @@ import { Button } from "../Button";
 
 import styles from "./StartRoomModal.module.scss";
 
-export const StartRoomModal = ({ onClose }) => {
+interface StartRoomModalProps {
+  onClose: () => void;
+}
+
+export const StartRoomModal: React.FC<StartRoomModalProps> = ({ onClose }) => {
   const [roomType, setRoomType] = React.useState("open");
 
   return (

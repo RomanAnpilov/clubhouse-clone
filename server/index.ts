@@ -10,8 +10,9 @@ dotenv.config({
 
 import "./core/db";
 import AuthController from "./controllers/AuthController";
+import RoomController from "./controllers/RoomController";
 
-console.log(typeof process.env.DB_PASSWORD)
+console.log(typeof process.env.DB_PASSWORD);
 
 const app = express();
 
@@ -19,13 +20,38 @@ app.use(cors());
 app.use(express.json());
 app.use(passport.initialize());
 
+// Роуты под комнаты
+app.get(
+  "/rooms",
+  passport.authenticate("jwt", { session: false }),
+  RoomController.index
+);
+app.post(
+  "/rooms",
+  passport.authenticate("jwt", { session: false }),
+  RoomController.create
+);
+app.get(
+  "/rooms/:id",
+  passport.authenticate("jwt", { session: false }),
+  RoomController.show
+);
+app.delete(
+  "/rooms/:id",
+  passport.authenticate("jwt", { session: false }),
+  RoomController.delete
+);
+
+
 // Регистрация через гит
 app.get("/auth/github", passport.authenticate("github"));
 
 // Получение данных о профиле
 app.get(
   "/auth/me",
-  passport.authenticate("jwt", { session: false }), AuthController.getMe);
+  passport.authenticate("jwt", { session: false }),
+  AuthController.getMe
+);
 
 // Активация через смс код
 app.get(

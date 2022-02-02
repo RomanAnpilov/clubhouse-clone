@@ -31,9 +31,10 @@ export const EnterPhoneStep: React.FC = () => {
     try {
       setIsLoading(true);
       console.log(Cookies.get("token"));
+      console.log(values)
       await Axios({
         method: "get",
-        url: `/auth/sms?=${values.value}`,
+        url: `/auth/sms?phone=${values.value}`,
         headers: {
           Authorization: "Bearer " + Cookies.get("token"),
         }

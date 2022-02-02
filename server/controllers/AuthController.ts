@@ -1,4 +1,5 @@
 import express from "express";
+import axios from "axios";
 import { Codes, User } from "../../models";
 import { generateRandomCode } from "../utils/generateRandomCode";
 
@@ -49,15 +50,17 @@ class AuthController {
     const phone = req.query.phone;
     const userId = String(req.user.id);
     const smsCode = String(generateRandomCode());
-    console.log(phone)
+    console.log("phone",phone)
     // if (!phone) {
     //   res.json({message: "Номер телефона не указан"})
     // }
 
     try {
-      // const data = await axios.get(
-      //   `https://sms.ru/sms/send?api_id=${process.env.SMS_API_KEY}&to=79149450581&msg=${smsCode}`
-      // );
+      // SEND SMS
+      const data = await axios.get(
+        `https://sms.ru/sms/send?api_id=${process.env.SMS_API_KEY}&to=${phone}&msg=${smsCode}`
+      );
+      // console.log("SMS", data)
 
       const findCode = await Codes.findOne({
         where: {
