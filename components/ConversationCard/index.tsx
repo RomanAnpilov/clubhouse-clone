@@ -9,18 +9,16 @@ import whiteBlockStyles from "../WhiteBlock/WhiteBlock.module.scss";
 
 interface ConversationCardProps {
     title: string;
-    guests: string[];
+    speakers: string[];
     avatars: string[];
     guestsCount: number;
-    speakersCount: number;
 }
 
 export const ConversationCard: React.FC<ConversationCardProps> = ({
   title,
-  guests = [],
+  speakers = [],
   avatars = [],
   guestsCount,
-  speakersCount,
 }) => {
   return (
     <div className={clsx(styles.card,whiteBlockStyles.block, "mb-30")}>
@@ -39,7 +37,7 @@ export const ConversationCard: React.FC<ConversationCardProps> = ({
         </div>
         <div className={clsx(styles.info, "ml-10")}>
           <ul className={styles.users}>
-            {guests.map((name, i) => (
+            {/* {speakers.map((name, i) => (
               <li key={i}>
                 {name}
                 <img
@@ -49,7 +47,7 @@ export const ConversationCard: React.FC<ConversationCardProps> = ({
                   height={14}
                 />
               </li>
-            ))}
+            ))} */}
           </ul>
           <ul className={styles.details}>
             <li>
@@ -62,7 +60,6 @@ export const ConversationCard: React.FC<ConversationCardProps> = ({
               />{" "}
             </li>
             <li>
-              {speakersCount}{" "}
               <img
                 className="ml-5"
                 src="/static/message.png"

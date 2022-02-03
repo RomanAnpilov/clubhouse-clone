@@ -1,7 +1,10 @@
 /* eslint-disable @next/next/no-img-element */
 import clsx from "clsx";
 import React from "react";
+
 import { Button } from "../Button";
+import { Axios } from "../../core/axios";
+import { useRouter } from "next/router";
 
 import styles from "./StartRoomModal.module.scss";
 
@@ -11,6 +14,15 @@ interface StartRoomModalProps {
 
 export const StartRoomModal: React.FC<StartRoomModalProps> = ({ onClose }) => {
   const [roomType, setRoomType] = React.useState("open");
+
+  const [form, setForm] = React.useState({title: '', type: ''})
+  const router = useRouter();
+  const onSubmit = async () => {
+    try {
+      const room = await Axios.post("/rooms", form);
+      router.push(`/rooms/${room.id}`)
+    } catch (error) {}
+  };
 
   return (
     <div className={styles.overlay}>

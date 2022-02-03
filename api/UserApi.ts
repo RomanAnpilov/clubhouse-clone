@@ -4,17 +4,11 @@ import { UserData } from "../pages";
 import Cookies from "nookies";
 
 export const UserApi = (ctx: GetServerSidePropsContext) => {
-  const cookies = Cookies.get(ctx);
-  const token = cookies.token;
+  const token = Cookies.get(ctx).token;
+  Axios.defaults.headers["Authorization"] = "Bearer " + token;
   return {
     getMe: async (): Promise<UserData> => {
-      const { data } = await Axios({
-        method: "get",
-        url: `/auth/me`,
-        headers: {
-          Authorization: "Bearer " + token,
-        },
-      });
+      const { data } = await Axios.get("/auth/me");
       return data;
     },
   };

@@ -1,5 +1,5 @@
 import React from "react";
-import axios from "axios";
+import {Axios} from "../core/axios";
 import Cookies from "nookies"
 
 import { Button } from "../components/Button";
@@ -8,11 +8,22 @@ import { Header } from "../components/Header";
 import { ConversationCard } from "../components/ConversationCard";
 import { UserApi } from "../api/UserApi";
 
+import {Room, RoomApi} from "../api/RoomApi";
+
 import Link from "next/link";
+import { checkAuth } from "../utils/checkAuth";
+import { GetServerSideProps, NextPage } from "next";
+import { useRouter } from "next/router";
 
 
-export default function Rooms({rooms = []}) {
+interface RoomPageProps {
+  rooms: Room[];
+}
+
+const Rooms: NextPage<RoomPageProps> = ({rooms = []}) => {
+  
   const [visibleModal, setVisibleModal] = React.useState(false);
+  
     return (
     <>
       <Header></Header>
@@ -28,10 +39,9 @@ export default function Rooms({rooms = []}) {
               <a>
                 <ConversationCard
                   title={room.title}
-                  guestsCount={room.guestCount}
-                  speakersCount={room.speakersCount}
-                  guests={room.guests}
-                  avatars={room.avatars}
+                  guestsCount={room.listenersCount}
+                  speakers={room.speakers}
+                  avatars={[]}
                 />
               </a>
             </Link>
@@ -42,15 +52,17 @@ export default function Rooms({rooms = []}) {
   );
 }
 
-export const getServerSideProps = async (ctx) => {
+export const getServerSideProps: GetServerSideProps<RoomPageProps> = async (ctx) => {
   try {
-    const {data} = await axios.get('http://localhost:3000/rooms.json');
-    // const user = await UserApi.getMe();
-    // console.log(user, "USER !!!!!!")
+    // const {data} = await axios.get('http://localhost:3000/rooms.json');
+    const user = await checkAuth(ctx);
+    console.log(user, "USER !!!!!!")
+    
+    const rooms = await RoomApi(ctx).getAll();
 
     return {
       props: {
-        rooms: data
+        rooms: rooms
       }
     }
     // console.log(data)
@@ -59,3 +71,5 @@ export const getServerSideProps = async (ctx) => {
   }
   
 }
+
+export default Rooms;
