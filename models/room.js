@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
   Room.init(
     {
       title: DataTypes.STRING,
-      speakers: DataTypes.JSON,
+      speakers: { type: DataTypes.JSON, defaultValue: [] },
       listenersCount: { type: DataTypes.INTEGER, defaultValue: 0 },
     },
     {

@@ -6,6 +6,7 @@ import { Button } from "../Button";
 import { Axios } from "../../core/axios";
 import { useRouter } from "next/router";
 import { RoomType } from "../../api/RoomApi";
+import { RoomApi } from "../../api/RoomApi";
 
 import styles from "./StartRoomModal.module.scss";
 
@@ -15,15 +16,21 @@ interface StartRoomModalProps {
 
 export const StartRoomModal: React.FC<StartRoomModalProps> = ({ onClose }) => {
   const [title, setTitle] = React.useState<string>("");
-  const [roomType, setRoomType] = React.useState<RoomType>("open");
+  const [type, setType] = React.useState<RoomType>("open");
 
   const router = useRouter();
 
   const onSubmit = async () => {
+    if (!title) {
+      alert("ALE, GDE TITLE")
+    }
+
     try {
-      const room = await Axios.post("/rooms", form);
+      const room = await RoomApi(Axios).create({title, type});
       router.push(`/rooms/${room.id}`);
-    } catch (error) {}
+    } catch (error) {
+      alert("Error when create a room")
+    }
   };
 
   return (
@@ -49,9 +56,9 @@ export const StartRoomModal: React.FC<StartRoomModalProps> = ({ onClose }) => {
           <h3>Room type</h3>
           <div className="d-flex justify-content-between">
             <div
-              onClick={() => setRoomType("open")}
+              onClick={() => setType("open")}
               className={clsx(styles.roomType, {
-                [styles.roomTypeActive]: roomType === "open",
+                [styles.roomTypeActive]: type === "open",
               })}
             >
               <img
@@ -63,9 +70,9 @@ export const StartRoomModal: React.FC<StartRoomModalProps> = ({ onClose }) => {
               <h5>Open</h5>
             </div>
             <div
-              onClick={() => setRoomType("social")}
+              onClick={() => setType("social")}
               className={clsx(styles.roomType, {
-                [styles.roomTypeActive]: roomType === "social",
+                [styles.roomTypeActive]: type === "social",
               })}
             >
               <img
@@ -77,9 +84,9 @@ export const StartRoomModal: React.FC<StartRoomModalProps> = ({ onClose }) => {
               <h5>Social</h5>
             </div>
             <div
-              onClick={() => setRoomType("closed")}
+              onClick={() => setType("closed")}
               className={clsx(styles.roomType, {
-                [styles.roomTypeActive]: roomType === "closed",
+                [styles.roomTypeActive]: type === "closed",
               })}
             >
               <img

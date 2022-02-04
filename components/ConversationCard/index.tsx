@@ -37,7 +37,7 @@ export const ConversationCard: React.FC<ConversationCardProps> = ({
         </div>
         <div className={clsx(styles.info, "ml-10")}>
           <ul className={styles.users}>
-            {/* {speakers.map((name, i) => (
+            {speakers.map((name, i) => (
               <li key={i}>
                 {name}
                 <img
@@ -47,7 +47,7 @@ export const ConversationCard: React.FC<ConversationCardProps> = ({
                   height={14}
                 />
               </li>
-            ))} */}
+            ))}
           </ul>
           <ul className={styles.details}>
             <li>
@@ -60,6 +60,7 @@ export const ConversationCard: React.FC<ConversationCardProps> = ({
               />{" "}
             </li>
             <li>
+              {speakers.length}
               <img
                 className="ml-5"
                 src="/static/message.png"

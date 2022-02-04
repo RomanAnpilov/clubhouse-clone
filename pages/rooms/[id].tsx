@@ -5,6 +5,7 @@ import {Axios} from "../../core/axios"
 import { Header } from "../../components/Header";
 import { BackButton } from "../../components/BackButton";
 import { Room } from "../../components/Room";
+import {API} from "../../api"
 
 export default function RoomPage({room}) {
   return (
@@ -20,16 +21,22 @@ export default function RoomPage({room}) {
 
 export const getServerSideProps = async (ctx) => {
   try {
-    const {data} = await Axios.get('/rooms.json');
-    const room = data.find((obj) => obj.id === ctx.query.id)
-    // console.log(room)
+    const roomID = ctx.query.id
+
+    const room = await API(ctx).get(roomID)
     return {
       props: {
         room: room
       }
     }
-    console.log(data)
   } catch (err) {
     console.log("ERROR BITCH!")
+    return {
+      props: [],
+      redirect: {
+        destination : '/rooms',
+        permanent : false,
+      }
+    }
   }
 }
