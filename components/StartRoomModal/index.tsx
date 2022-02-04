@@ -5,6 +5,7 @@ import React from "react";
 import { Button } from "../Button";
 import { Axios } from "../../core/axios";
 import { useRouter } from "next/router";
+import { RoomType } from "../../api/RoomApi";
 
 import styles from "./StartRoomModal.module.scss";
 
@@ -13,14 +14,15 @@ interface StartRoomModalProps {
 }
 
 export const StartRoomModal: React.FC<StartRoomModalProps> = ({ onClose }) => {
-  const [roomType, setRoomType] = React.useState("open");
+  const [title, setTitle] = React.useState<string>("");
+  const [roomType, setRoomType] = React.useState<RoomType>("open");
 
-  const [form, setForm] = React.useState({title: '', type: ''})
   const router = useRouter();
+
   const onSubmit = async () => {
     try {
       const room = await Axios.post("/rooms", form);
-      router.push(`/rooms/${room.id}`)
+      router.push(`/rooms/${room.id}`);
     } catch (error) {}
   };
 
@@ -37,6 +39,8 @@ export const StartRoomModal: React.FC<StartRoomModalProps> = ({ onClose }) => {
         <div className="mb-30">
           <h3>Topic</h3>
           <input
+          value={title}
+            onChange={(e) => setTitle(e.target.value)}
             className={styles.inputTitle}
             placeholder="Enter the topic to be discussed"
           />
@@ -91,7 +95,7 @@ export const StartRoomModal: React.FC<StartRoomModalProps> = ({ onClose }) => {
         <div className={styles.delimiter}></div>
         <div className="text-center">
           <h3>Start a room open to everyone</h3>
-          <Button color="green" onClick={onClose}>
+          <Button color="green" onClick={onSubmit}>
             <img
               width={18}
               height={18}

@@ -6,7 +6,7 @@ import { Button } from "../components/Button";
 import {StartRoomModal} from "../components/StartRoomModal";
 import { Header } from "../components/Header";
 import { ConversationCard } from "../components/ConversationCard";
-import { UserApi } from "../api/UserApi";
+import { API } from "../api";
 
 import {Room, RoomApi} from "../api/RoomApi";
 
@@ -58,7 +58,7 @@ export const getServerSideProps: GetServerSideProps<RoomPageProps> = async (ctx)
     const user = await checkAuth(ctx);
     console.log(user, "USER !!!!!!")
     
-    const rooms = await RoomApi(ctx).getAll();
+    const rooms = await API(ctx).getAll();
 
     return {
       props: {

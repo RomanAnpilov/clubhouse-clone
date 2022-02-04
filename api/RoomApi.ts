@@ -1,4 +1,4 @@
-import { Axios } from "../core/axios";
+import { AxiosInstance } from "axios";
 import { GetServerSidePropsContext } from "next";
 import Cookies from "nookies";
 
@@ -9,25 +9,22 @@ export interface Room {
   listenersCount: number;
 }
 
-type RoomType = "open" | "social" | "closed";
+export type RoomType = "open" | "social" | "closed";
 
-export const RoomApi = (ctx: GetServerSidePropsContext) => {
-  const token = Cookies.get(ctx).token;
-  Axios.defaults.headers["Authorization"] = "Bearer " + token;
-
+export const RoomApi = (instance: AxiosInstance) => {
   return {
     getAll: async (): Promise<Room[]> => {
-      const { data } = await Axios.get("/rooms");
+      const { data } = await instance.get("/rooms");
       return data;
     },
     get: async (id: number): Promise<Room> => {
-      const { data } = await Axios.get(`/rooms/${id}`);
+      const { data } = await instance.get(`/rooms/${id}`);
       return data;
     },
     create: async (form : {title: string, type: RoomType}): Promise<Room> => {
-      const { data } = await Axios.post("/rooms", form);
+      const { data } = await instance.post("/rooms", form);
       return data;
     },
-    delete: async (id: number): Promise<void> => Axios.delete(`/rooms/${id}`),
+    delete: async (id: number): Promise<void> => instance.delete(`/rooms/${id}`),
   };
 };
