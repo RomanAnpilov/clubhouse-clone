@@ -1,24 +1,49 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Room } from "../../api/RoomApi";
+import { createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
+import { HYDRATE } from "next-redux-wrapper";
+import { Room, RoomApi, RoomType } from "../../api/RoomApi";
+import { Axios } from "../../core/axios";
+import { RootState } from "../store";
 
 type RoomsSliceState = {
-    items: Room[],
-}
+  items: Room[];
+};
 
 const initialState: RoomsSliceState = {
-    items: []
-}
+  items: [],
+};
+
+export const fetchCreateRoom = createAsyncThunk<
+  Room,
+  { title: string; type: RoomType }
+>("rooms/fetchCreateRoomStatus", async ({ title, type }) => {
+  try {
+    const room = await RoomApi(Axios).create({ title, type });
+    return room;
+  } catch (error) {
+    throw Error("Error when create a room: " + error)
+  }
+});
 
 export const roomsSlice = createSlice({
   name: "rooms",
   initialState,
   reducers: {
-    addRoom: (state, action: PayloadAction<Room>) => {
-      state.items.push(action.payload)
-    },
+    setRooms: (state, action: PayloadAction<Room[]>) => {
+      state.items = action.payload;
+    }
+  },
+  extraReducers: (builder) => {
+    builder.addCase(
+      fetchCreateRoom.fulfilled.type,
+      (state, action: PayloadAction<Room>) => {
+        state.items.push(action.payload);
+      }
+    ).addCase(HYDRATE as any, (state, action: PayloadAction<RootState>) => {
+        state.items = action.payload.rooms.items;
+    });
   },
 });
 
-export const { addRoom} = roomsSlice.actions;
+export const { setRooms } = roomsSlice.actions;
 
 export const roomsReducer = roomsSlice.reducer;

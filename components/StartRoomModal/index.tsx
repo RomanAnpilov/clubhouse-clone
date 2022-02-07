@@ -7,8 +7,11 @@ import { Axios } from "../../core/axios";
 import { useRouter } from "next/router";
 import { RoomType } from "../../api/RoomApi";
 import { RoomApi } from "../../api/RoomApi";
+import { useDispatch } from "react-redux";
 
 import styles from "./StartRoomModal.module.scss";
+import { fetchCreateRoom } from "../../redux/slices/roomSlice";
+import { useAsyncAction } from "../../hooks/useAction";
 
 interface StartRoomModalProps {
   onClose: () => void;
@@ -17,20 +20,16 @@ interface StartRoomModalProps {
 export const StartRoomModal: React.FC<StartRoomModalProps> = ({ onClose }) => {
   const [title, setTitle] = React.useState<string>("");
   const [type, setType] = React.useState<RoomType>("open");
+  const createRoom = useAsyncAction(fetchCreateRoom);
 
   const router = useRouter();
 
   const onSubmit = async () => {
     if (!title) {
-      alert("ALE, GDE TITLE")
+      alert("ALE, GDE TITLE");
     }
-
-    try {
-      const room = await RoomApi(Axios).create({title, type});
-      router.push(`/rooms/${room.id}`);
-    } catch (error) {
-      alert("Error when create a room")
-    }
+    const room = await createRoom({title, type})
+    router.push(`/rooms/${room.id}`)
   };
 
   return (
@@ -46,7 +45,7 @@ export const StartRoomModal: React.FC<StartRoomModalProps> = ({ onClose }) => {
         <div className="mb-30">
           <h3>Topic</h3>
           <input
-          value={title}
+            value={title}
             onChange={(e) => setTitle(e.target.value)}
             className={styles.inputTitle}
             placeholder="Enter the topic to be discussed"
