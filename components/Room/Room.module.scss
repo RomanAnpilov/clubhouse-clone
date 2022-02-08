@@ -1,6 +1,6 @@
 .wrapper {
     background-color: #fff;
-    height: calc(100vh - 210px);
+    height: calc(100vh - 190px);
     border-top-left-radius: 50px;
     border-top-right-radius: 50px;
     padding: 30px 70px;
@@ -41,4 +41,9 @@
         font-size: 18px;
         margin-top: 10px;
     }
+}
+
+.users {
+    display: flex;
+    flex-wrap:wrap
 }

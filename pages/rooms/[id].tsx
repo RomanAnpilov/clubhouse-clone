@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import React from "react";
 import { Axios } from "../../core/axios";
+import io, { Socket } from "socket.io-client";
 
 import { Header } from "../../components/Header";
 import { BackButton } from "../../components/BackButton";
@@ -9,8 +10,25 @@ import { API } from "../../api";
 import { GetServerSideProps } from "next";
 import { wrapper } from "../../redux/store";
 import { checkAuth } from "../../utils/checkAuth";
+import { DefaultEventsMap } from "socket.io/dist/typed-events";
+import { useRouter } from "next/router";
+
 
 export default function RoomPage({ room }) {
+  const router = useRouter();
+
+  const socketRef = React.useRef<Socket<DefaultEventsMap, DefaultEventsMap>>();
+
+  React.useEffect(() => {
+    socketRef.current = io("http://localhost:3002");
+
+    socketRef.current.emit("ROOMS/JOIN", router.query.id)
+
+    return () => {
+      socketRef.current.disconnect()
+    }
+  }, []);
+
   return (
     <>
       <Header />
@@ -27,16 +45,6 @@ export const getServerSideProps: GetServerSideProps =
     {
       try {
         const user = await checkAuth(ctx, store);
-
-        // if (!user) {
-        //   return {
-        //     props: {},
-        //     redirect: {
-        //       permanent: false,
-        //       destination: "/",
-        //     },
-        //   };
-        // }
         const roomID = ctx.query.id;
 
         const room = await API(ctx).get(Number(roomID));

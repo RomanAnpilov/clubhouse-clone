@@ -1,5 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
+import socket from "socket.io";
+import {createServer} from "http";
 import cors from "cors";
 import { passport } from "./core/passport";
 import { upload } from "./core/upload";
@@ -15,6 +17,27 @@ import RoomController from "./controllers/RoomController";
 console.log(typeof process.env.DB_PASSWORD);
 
 const app = express();
+const server = createServer(app);
+const io = socket(server, {
+  cors: {
+    origin: '*',
+  },
+});
+
+io.on('connection', (socket) => {
+  console.log('user connected');
+
+  socket.on('ROOMS/JOIN', (roomId) => {
+    console.log("USER CONNECT TO ROOM!", roomId);
+
+    socket.join(`room/`)
+  })
+
+  socket.on("disconnect", () => {
+    console.log("disconnect")
+  })
+});
+
 
 app.use(cors());
 app.use(express.json());
@@ -81,6 +104,6 @@ app.get(
   AuthController.authCallback
 );
 
-app.listen(3002, () => {
+server.listen(3002, () => {
   console.log("SERVER RUNNED");
 });
