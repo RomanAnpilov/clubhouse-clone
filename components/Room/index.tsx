@@ -1,12 +1,18 @@
 /* eslint-disable @next/next/no-img-element */
 import clsx from "clsx";
 import Link from "next/link";
+import { DefaultEventsMap } from "socket.io/dist/typed-events";
+import { useRouter } from "next/router";
+import io, { Socket } from "socket.io-client";
 import React from "react";
 
 import { Button } from "../Button";
 import { Speaker } from "../Speaker";
 
 import styles from "./Room.module.scss";
+import { useSelector } from "react-redux";
+import { selectUser } from "../../redux/selectors";
+import { UserData } from "../../pages";
 
 interface RoomProps {
   title: string;
@@ -18,7 +24,37 @@ type User = {
 };
 
 export const Room: React.FC<RoomProps> = ({ title }) => {
-  const [users, setUsers] = React.useState<User[]>([]);
+  const user = useSelector(selectUser)
+  const [users, setUsers] = React.useState<UserData[]>([]);
+
+  const router = useRouter();
+
+  const socketRef = React.useRef<Socket<DefaultEventsMap, DefaultEventsMap>>();
+
+  React.useEffect(() => {
+    socketRef.current = io("http://localhost:3002");
+
+    socketRef.current.emit("CLIENT@ROOMS:JOIN", {
+      user: user,
+      roomId: router.query.id,
+    });
+
+    socketRef.current.on("SERVER@ROOMS:JOIN", (joinedUser) => {
+      setUsers((prev) => [...prev, joinedUser]);
+      console.log(joinedUser);
+    });
+
+    socketRef.current.on("SERVER@ROOMS:LEAVE", (leaveUser) => {
+     setUsers((prev) => prev.filter(obj => obj.id !== leaveUser.id))
+     console.log("AGAGAGAG")
+    });
+
+    setUsers((prev) => [...prev, user])
+
+    return () => {
+      socketRef.current.disconnect();
+    };
+  }, []);
 
   return (
     <>

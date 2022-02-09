@@ -13,23 +13,8 @@ import { checkAuth } from "../../utils/checkAuth";
 import { DefaultEventsMap } from "socket.io/dist/typed-events";
 import { useRouter } from "next/router";
 
-
-export default function RoomPage({ room }) {
-  const router = useRouter();
-
-  const socketRef = React.useRef<Socket<DefaultEventsMap, DefaultEventsMap>>();
-
-  React.useEffect(() => {
-    socketRef.current = io("http://localhost:3002");
-
-    socketRef.current.emit("ROOMS/JOIN", router.query.id)
-
-    return () => {
-      socketRef.current.disconnect()
-    }
-  }, []);
-
-  return (
+export default function RoomPage({ room}) {
+    return (
     <>
       <Header />
       <div className="container mt-40">

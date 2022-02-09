@@ -11,8 +11,11 @@ import { StepInfo } from "../../StepInfo";
 import Cookies from "js-cookie";
 
 import styles from "./EnterCodeStep.module.scss";
+import { MainContext } from "../../../pages";
 
 export const EnterCodeStep: React.FC = () => {
+  const {userData} = React.useContext(MainContext)
+
   const router = useRouter();
 
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
@@ -37,10 +40,14 @@ export const EnterCodeStep: React.FC = () => {
     try {
       setIsLoading(true);
       await Axios({
-        method: "get",
+        method: "post",
         url: `/auth/sms/activate?code=${codes.join('')}`,
         headers: {
           Authorization: "Bearer " + Cookies.get("token"),
+        },
+        data: {
+          code: codes.join(''),
+          user: userData
         }
       });
       router.push("/rooms");

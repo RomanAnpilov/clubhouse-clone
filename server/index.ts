@@ -14,8 +14,6 @@ import "./core/db";
 import AuthController from "./controllers/AuthController";
 import RoomController from "./controllers/RoomController";
 
-console.log(typeof process.env.DB_PASSWORD);
-
 const app = express();
 const server = createServer(app);
 const io = socket(server, {
@@ -24,17 +22,29 @@ const io = socket(server, {
   },
 });
 
+const rooms = [];
+
 io.on('connection', (socket) => {
   console.log('user connected');
 
-  socket.on('ROOMS/JOIN', (roomId) => {
+  socket.on('CLIENT@ROOMS:JOIN', ({user,roomId}) => {
+    socket.roomId = roomId;
     console.log("USER CONNECT TO ROOM!", roomId);
 
-    socket.join(`room/`)
+    socket.join(`room/${roomId}`)
+    socket.broadcast.to(`room/${roomId}`).emit('SERVER@ROOMS:JOIN', user)
+    rooms[socket.id] = {roomId, user};
   })
 
   socket.on("disconnect", () => {
-    console.log("disconnect")
+    console.log(rooms)
+    if (rooms[socket.id]) {
+      const {roomId, user} = rooms[socket.id];
+      socket.broadcast.to(`room/${roomId}`).emit('SERVER@ROOMS:LEAVE', user)
+      console.log("disconnect")
+    }
+    delete rooms[socket.id];
+    console.log(rooms)
   })
 });
 
@@ -77,7 +87,7 @@ app.get(
 );
 
 // Активация через смс код
-app.get(
+app.post(
   "/auth/sms/activate",
   passport.authenticate("jwt", { session: false }),
   AuthController.activate

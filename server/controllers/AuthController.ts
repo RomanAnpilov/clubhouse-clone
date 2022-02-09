@@ -18,13 +18,13 @@ class AuthController {
 
   async activate(req: express.Request, res: express.Response) {
     const userId = String(req.user.id);
-    const smsCode = String(req.query.code);
+    const {user, code} = req.body;
 
-    if (!smsCode) {
+    if (!code) {
       return res.status(400).send();
     }
 
-    const whereQuery = { code: smsCode, user_id: userId };
+    const whereQuery = { code: code, user_id: userId };
 
     try {
       const findCode = await Codes.findOne({
@@ -35,7 +35,7 @@ class AuthController {
         await Codes.destroy({
           where: whereQuery,
         });
-        await User.update({isActive: 1}, {where: {id: userId}})
+        await User.update({...user, isActive: 1}, {where: {id: userId}})
         return res.send("Succes activated");
       } else {
         throw new Error("User not found");
