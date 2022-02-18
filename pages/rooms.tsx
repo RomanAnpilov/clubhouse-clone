@@ -48,7 +48,6 @@ const Rooms: NextPage = () => {
                   title={room.title}
                   guestsCount={room.listenersCount}
                   speakers={room.speakers}
-                  avatars={[]}
                 />
               </a>
             </Link>

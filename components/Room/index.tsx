@@ -29,6 +29,8 @@ export const Room: React.FC<RoomProps> = ({ title }) => {
 
   const router = useRouter();
 
+  const roomId = router.query.id;
+
   const socketRef = React.useRef<Socket<DefaultEventsMap, DefaultEventsMap>>();
 
   React.useEffect(() => {
@@ -36,20 +38,19 @@ export const Room: React.FC<RoomProps> = ({ title }) => {
 
     socketRef.current.emit("CLIENT@ROOMS:JOIN", {
       user: user,
-      roomId: router.query.id,
+      roomId,
     });
 
-    socketRef.current.on("SERVER@ROOMS:JOIN", (joinedUser) => {
-      setUsers((prev) => [...prev, joinedUser]);
-      console.log(joinedUser);
+    socketRef.current.on("SERVER@ROOMS:JOIN", (allUsers) => {
+      setUsers(allUsers);
+      console.log(allUsers);
     });
 
     socketRef.current.on("SERVER@ROOMS:LEAVE", (leaveUser) => {
      setUsers((prev) => prev.filter(obj => obj.id !== leaveUser.id))
      console.log("AGAGAGAG")
     });
-
-    setUsers((prev) => [...prev, user])
+    console.log(users)
 
     return () => {
       socketRef.current.disconnect();

@@ -5,6 +5,7 @@ import {createServer} from "http";
 import cors from "cors";
 import { passport } from "./core/passport";
 import { upload } from "./core/upload";
+import {Room} from "../models"
 
 dotenv.config({
   path: "server/.env",
@@ -13,6 +14,7 @@ dotenv.config({
 import "./core/db";
 import AuthController from "./controllers/AuthController";
 import RoomController from "./controllers/RoomController";
+import { getUsersFromRoom, SocketRoom } from "../utils/getUsersFroomRoom";
 
 const app = express();
 const server = createServer(app);
@@ -22,18 +24,22 @@ const io = socket(server, {
   },
 });
 
-const rooms = [];
+const rooms: SocketRoom = {};
 
 io.on('connection', (socket) => {
   console.log('user connected');
 
   socket.on('CLIENT@ROOMS:JOIN', ({user,roomId}) => {
     socket.roomId = roomId;
+    
     console.log("USER CONNECT TO ROOM!", roomId);
 
     socket.join(`room/${roomId}`)
-    socket.broadcast.to(`room/${roomId}`).emit('SERVER@ROOMS:JOIN', user)
     rooms[socket.id] = {roomId, user};
+    const users = getUsersFromRoom(rooms, roomId);
+    io.in(`room/${roomId}`).emit('SERVER@ROOMS:JOIN', users)
+    
+    Room.update({speakers: users}, {where: {id: roomId}})
   })
 
   socket.on("disconnect", () => {
@@ -41,9 +47,11 @@ io.on('connection', (socket) => {
     if (rooms[socket.id]) {
       const {roomId, user} = rooms[socket.id];
       socket.broadcast.to(`room/${roomId}`).emit('SERVER@ROOMS:LEAVE', user)
+      delete rooms[socket.id];
+      const users = getUsersFromRoom(rooms, roomId);
+    Room.update({speakers: users}, {where: {id: roomId}})
       console.log("disconnect")
     }
-    delete rooms[socket.id];
     console.log(rooms)
   })
 });
